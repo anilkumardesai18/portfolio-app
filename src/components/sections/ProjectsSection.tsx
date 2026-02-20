@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
-import { Github, ExternalLink, Plus } from "lucide-react";
+import { Github, ExternalLink, Layers } from "lucide-react";
 
 export type Project = {
     id: number;
@@ -16,14 +16,28 @@ export type Project = {
     comingSoon: boolean;
 };
 
-const STORAGE_KEY = "portfolio_projects";
+export const STORAGE_KEY = "portfolio_projects";
 
-const defaultProjects: Project[] = [
+export function loadProjects(): Project[] {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) return JSON.parse(saved) as Project[];
+    } catch { /* noop */ }
+    return defaultProjects;
+}
+
+export function saveProjects(projects: Project[]) {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    } catch { /* noop */ }
+}
+
+export const defaultProjects: Project[] = [
     {
         id: 1,
         title: "Smart Object Awareness",
         description:
-            "An assistive technology device built on Raspberry Pi using OpenCV to capture, identify, and audibly describe real-world objects — enhancing environmental awareness and navigation for visually impaired individuals.",
+            "An assistive technology device built on Raspberry Pi using OpenCV to capture, identify, and audibly describe real-world objects — enhancing navigation for visually impaired individuals.",
         tags: ["Raspberry Pi", "OpenCV", "Python", "IoT", "Computer Vision"],
         color: "#6378ff",
         gradient: "linear-gradient(135deg, #6378ff22, #a855f722)",
@@ -35,7 +49,7 @@ const defaultProjects: Project[] = [
         id: 2,
         title: "AI Prompt Analyzer",
         description:
-            "A full-stack web application that analyzes AI prompts to help users write better instructions. Provides scores and detailed feedback on clarity and structure by using the Google AI API via a Node.js backend.",
+            "A full-stack web application that analyzes AI prompts and provides detailed clarity and structure scores, powered by Google AI API via a Node.js backend.",
         tags: ["Google AI API", "Node.js", "Next.js", "Gen AI", "Prompt Engineering"],
         color: "#a855f7",
         gradient: "linear-gradient(135deg, #a855f722, #ec489922)",
@@ -47,7 +61,7 @@ const defaultProjects: Project[] = [
         id: 3,
         title: "ADmyBRAND Insights",
         description:
-            "A full-stack analytics dashboard for marketing agencies built with Next.js, React, and TypeScript. Features real-time interactive charts, advanced data tables with filtering/sorting, and a complete authentication system.",
+            "A full-stack analytics dashboard for marketing agencies. Features real-time interactive charts, advanced data tables with filtering/sorting, dark/light mode, and a complete auth system.",
         tags: ["Next.js", "React", "TypeScript", "Dashboard", "Analytics"],
         color: "#22d3ee",
         gradient: "linear-gradient(135deg, #22d3ee22, #6378ff22)",
@@ -55,321 +69,179 @@ const defaultProjects: Project[] = [
         githubUrl: "#",
         comingSoon: false,
     },
-    ...Array.from({ length: 7 }, (_, i) => ({
-        id: i + 4,
-        title: "",
-        description: "",
-        tags: [] as string[],
-        color: ["#f59e0b", "#ec4899", "#22c55e", "#6378ff", "#a855f7", "#f59e0b", "#22d3ee"][i],
-        gradient: [
-            "linear-gradient(135deg, #f59e0b22, #ec489922)",
-            "linear-gradient(135deg, #ec489922, #a855f722)",
-            "linear-gradient(135deg, #22c55e22, #22d3ee22)",
-            "linear-gradient(135deg, #6378ff22, #a855f722)",
-            "linear-gradient(135deg, #a855f722, #f59e0b22)",
-            "linear-gradient(135deg, #f59e0b22, #6378ff22)",
-            "linear-gradient(135deg, #22d3ee22, #ec489922)",
-        ][i],
-        demoUrl: "#",
-        githubUrl: "#",
-        comingSoon: true,
-    })),
 ];
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-    const [hovered, setHovered] = useState(false);
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-80px" });
+const icons = ["🤖", "👁️", "📊", "🔌", "⚡", "🧠", "🛰️"];
 
-    if (project.comingSoon) {
-        return (
-            <motion.article
-                ref={ref}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                    position: "relative",
-                    background: "rgba(13, 17, 40, 0.4)",
-                    backdropFilter: "blur(24px)",
-                    border: `1px dashed ${project.color}30`,
-                    borderRadius: 16,
-                    padding: "2rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minHeight: 220,
-                    gap: "0.75rem",
-                    cursor: "default",
-                    textAlign: "center",
-                }}
-            >
-                <div
-                    style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 10,
-                        background: `${project.color}15`,
-                        border: `1px dashed ${project.color}40`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: project.color,
-                        opacity: 0.6,
-                    }}
-                >
-                    <Plus size={22} />
-                </div>
-                <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--color-text-muted)", opacity: 0.5, fontFamily: "var(--font-mono)" }}>
-                    Coming Soon
-                </div>
-                <div style={{ fontSize: "0.75rem", color: "var(--color-text-subtle)", opacity: 0.4 }}>
-                    Slot {index + 1}
-                </div>
-            </motion.article>
-        );
-    }
+function SpotlightCard({ project, index }: { project: Project; index: number }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const inView = useInView(ref, { once: true, margin: "-60px" });
+    const [spotX, setSpotX] = useState(50);
+    const [spotY, setSpotY] = useState(50);
+    const [hovered, setHovered] = useState(false);
+
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setSpotX(((e.clientX - rect.left) / rect.width) * 100);
+        setSpotY(((e.clientY - rect.top) / rect.height) * 100);
+    }, []);
+
+    if (project.comingSoon) return null;
 
     return (
-        <motion.article
+        <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.65, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+            onMouseMove={handleMouseMove}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            style={{
-                position: "relative",
-                background: hovered ? project.gradient : "rgba(13, 17, 40, 0.7)",
-                backdropFilter: "blur(24px)",
-                border: `1px solid ${hovered ? project.color + "60" : "rgba(99,120,255,0.1)"}`,
-                borderRadius: 16,
-                padding: "2rem",
-                transition: "all 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
-                transform: hovered ? "translateY(-8px)" : "translateY(0)",
-                boxShadow: hovered ? `0 20px 40px ${project.color}20` : "none",
-                cursor: "default",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-            }}
+            className="spotlight-card"
+            style={{ cursor: "default" }}
         >
-            {/* Top Glow */}
-            <div
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "60%",
-                    height: 1,
-                    background: `linear-gradient(90deg, transparent, ${project.color}, transparent)`,
-                    opacity: hovered ? 1 : 0,
-                    transition: "opacity 0.4s",
-                }}
-            />
+            {/* Spotlight gradient */}
+            <div style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                background: `radial-gradient(600px circle at ${spotX}% ${spotY}%, ${project.color}18 0%, transparent 60%)`,
+                opacity: hovered ? 1 : 0,
+                transition: "opacity 0.3s",
+                borderRadius: "inherit",
+            }} />
 
-            {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
-                <div
-                    style={{
-                        width: 44,
-                        height: 44,
-                        borderRadius: 10,
-                        background: `${project.color}20`,
-                        border: `1px solid ${project.color}40`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <span style={{ fontSize: "1.2rem" }}>⚡</span>
+            {/* Left accent stripe */}
+            <div style={{
+                position: "absolute", left: 0, top: "15%", bottom: "15%",
+                width: 3, borderRadius: "0 3px 3px 0",
+                background: `linear-gradient(to bottom, ${project.color}00, ${project.color}, ${project.color}00)`,
+                opacity: hovered ? 1 : 0.5,
+                transition: "opacity 0.3s",
+            }} />
+
+            <div style={{ padding: "2rem 2rem 2rem 2.5rem", display: "flex", gap: "1.75rem", flexWrap: "wrap" }}>
+                {/* Icon */}
+                <div style={{ flexShrink: 0 }}>
+                    <div style={{
+                        width: 52, height: 52, borderRadius: 14,
+                        background: `${project.color}18`,
+                        border: `1px solid ${project.color}35`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "1.4rem",
+                        transition: "box-shadow 0.3s",
+                        boxShadow: hovered ? `0 0 20px ${project.color}30` : "none",
+                    }}>
+                        {icons[index % icons.length]}
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div style={{ flex: 1, minWidth: 220 }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.6rem" }}>
+                        <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "var(--color-text)", letterSpacing: "-0.01em" }}>
+                            {project.title}
+                        </h3>
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            {project.githubUrl !== "#" && (
+                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+                                    style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", fontSize: "0.78rem", color: "var(--color-text-muted)", textDecoration: "none", padding: "0.3rem 0.7rem", border: "1px solid var(--color-border)", borderRadius: 7, transition: "all 0.2s" }}
+                                    onMouseEnter={e => { e.currentTarget.style.borderColor = project.color + "60"; e.currentTarget.style.color = project.color; }}
+                                    onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--color-border)"; e.currentTarget.style.color = "var(--color-text-muted)"; }}>
+                                    <Github size={12} /> Code
+                                </a>
+                            )}
+                            {project.demoUrl !== "#" && (
+                                <a href={project.demoUrl} target="_blank" rel="noopener noreferrer"
+                                    style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", fontSize: "0.78rem", color: "white", textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 7, background: project.color, transition: "opacity 0.2s" }}
+                                    onMouseEnter={e => { e.currentTarget.style.opacity = "0.85"; }}
+                                    onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}>
+                                    <ExternalLink size={12} /> Live
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                    <p style={{ fontSize: "0.875rem", color: "var(--color-text-muted)", lineHeight: 1.75, marginBottom: "1rem" }}>
+                        {project.description}
+                    </p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                        {project.tags.map((t) => (
+                            <span key={t} className="tag" style={{ borderColor: `${project.color}25`, color: project.color + "bb" }}>
+                                {t}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </div>
-
-            <h3 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", color: "var(--color-text)" }}>
-                {project.title}
-            </h3>
-
-            <p style={{ fontSize: "0.875rem", color: "var(--color-text-muted)", lineHeight: 1.7, marginBottom: "1.25rem", flex: 1 }}>
-                {project.description}
-            </p>
-
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.25rem" }}>
-                {project.tags.map((tag) => (
-                    <span key={tag} className="tag">{tag}</span>
-                ))}
-            </div>
-
-            {/* Action Buttons */}
-            <div
-                style={{
-                    display: "flex",
-                    gap: "0.75rem",
-                    paddingTop: "1rem",
-                    borderTop: "1px solid rgba(255,255,255,0.06)",
-                }}
-            >
-                <a
-                    href={project.githubUrl !== "#" ? project.githubUrl : undefined}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => { if (project.githubUrl === "#") e.preventDefault(); }}
-                    style={{
-                        flex: 1,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "0.4rem",
-                        padding: "0.55rem 0.75rem",
-                        background: project.githubUrl !== "#" ? `${project.color}15` : "rgba(255,255,255,0.04)",
-                        border: `1px solid ${project.githubUrl !== "#" ? project.color + "35" : "rgba(255,255,255,0.07)"}`,
-                        borderRadius: 9,
-                        color: project.githubUrl !== "#" ? project.color : "var(--color-text-subtle)",
-                        textDecoration: "none",
-                        fontSize: "0.8rem",
-                        fontWeight: 600,
-                        transition: "all 0.25s",
-                        cursor: project.githubUrl !== "#" ? "pointer" : "default",
-                        opacity: project.githubUrl !== "#" ? 1 : 0.4,
-                    }}
-                    onMouseEnter={(e) => { if (project.githubUrl !== "#") { (e.currentTarget as HTMLElement).style.background = `${project.color}28`; (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)"; } }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = project.githubUrl !== "#" ? `${project.color}15` : "rgba(255,255,255,0.04)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}
-                >
-                    <Github size={14} />
-                    GitHub
-                </a>
-                <a
-                    href={project.demoUrl !== "#" ? project.demoUrl : undefined}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => { if (project.demoUrl === "#") e.preventDefault(); }}
-                    style={{
-                        flex: 1,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "0.4rem",
-                        padding: "0.55rem 0.75rem",
-                        background: project.demoUrl !== "#" ? `${project.color}15` : "rgba(255,255,255,0.04)",
-                        border: `1px solid ${project.demoUrl !== "#" ? project.color + "35" : "rgba(255,255,255,0.07)"}`,
-                        borderRadius: 9,
-                        color: project.demoUrl !== "#" ? project.color : "var(--color-text-subtle)",
-                        textDecoration: "none",
-                        fontSize: "0.8rem",
-                        fontWeight: 600,
-                        transition: "all 0.25s",
-                        cursor: project.demoUrl !== "#" ? "pointer" : "default",
-                        opacity: project.demoUrl !== "#" ? 1 : 0.4,
-                    }}
-                    onMouseEnter={(e) => { if (project.demoUrl !== "#") { (e.currentTarget as HTMLElement).style.background = `${project.color}28`; (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)"; } }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = project.demoUrl !== "#" ? `${project.color}15` : "rgba(255,255,255,0.04)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}
-                >
-                    <ExternalLink size={14} />
-                    Live Demo
-                </a>
-            </div>
-        </motion.article>
+        </motion.div>
     );
 }
 
-export function loadProjects(): Project[] {
-    if (typeof window === "undefined") return defaultProjects;
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) return JSON.parse(stored);
-    } catch { /* ignore */ }
-    return defaultProjects;
-}
-
-export function saveProjects(projects: Project[]) {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
-    } catch { /* ignore */ }
-}
-
-export { defaultProjects, STORAGE_KEY };
-
-export default function ProjectsSection() {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
-    const [projects, setProjects] = useState<Project[]>(defaultProjects);
-
-    useEffect(() => {
-        setProjects(loadProjects());
-        const onStorage = () => setProjects(loadProjects());
-        window.addEventListener("storage", onStorage);
-        return () => window.removeEventListener("storage", onStorage);
-    }, []);
-
+function ComingSoonRow({ count }: { count: number }) {
+    if (count <= 0) return null;
     return (
-        <section
-            id="projects"
-            ref={ref}
+        <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             style={{
-                padding: "var(--section-padding) clamp(1.5rem, 5vw, 4rem)",
-                maxWidth: 1320,
-                margin: "0 auto",
-                position: "relative",
+                display: "flex", alignItems: "center", gap: "1rem",
+                padding: "1rem 1.5rem",
+                border: "1px dashed rgba(99,120,255,0.15)",
+                borderRadius: 12,
+                color: "var(--color-text-subtle)",
             }}
         >
-            {/* Label */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6 }}
-            >
-                <div className="section-label">
-                    <span>03</span>
-                    <span>Projects</span>
+            <Layers size={15} />
+            <span style={{ fontSize: "0.82rem", fontFamily: "var(--font-mono)" }}>
+                +{count} more projects in progress — check back soon
+            </span>
+        </motion.div>
+    );
+}
+
+export default function ProjectsSection() {
+    const [projects, setProjects] = useState<Project[]>(defaultProjects);
+    const headerRef = useRef(null);
+    const headerInView = useInView(headerRef, { once: true });
+
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) setProjects(JSON.parse(saved));
+        } catch { /* noop */ }
+    }, []);
+
+    const realProjects = projects.filter((p) => !p.comingSoon);
+    const comingSoonCount = projects.filter((p) => p.comingSoon).length;
+
+    return (
+        <section id="projects" style={{ padding: "var(--section-padding) clamp(1.5rem, 5vw, 4rem)" }}>
+            <div style={{ maxWidth: 900, margin: "0 auto" }}>
+                {/* Header */}
+                <motion.div
+                    ref={headerRef}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={headerInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.6 }}
+                    style={{ textAlign: "center", marginBottom: "3.5rem" }}
+                >
+                    <div className="section-label" style={{ margin: "0 auto 1rem" }}>
+                        <span>🚀</span> Projects
+                    </div>
+                    <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: "0.75rem" }}>
+                        Things I&apos;ve <span className="text-gradient">Built</span>
+                    </h2>
+                    <p style={{ color: "var(--color-text-muted)", maxWidth: 440, margin: "0 auto", fontSize: "0.95rem", lineHeight: 1.7 }}>
+                        Real-world projects blending AI, web, and hardware to solve actual problems.
+                    </p>
+                </motion.div>
+
+                {/* Project Cards */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                    {realProjects.map((p, i) => <SpotlightCard key={p.id} project={p} index={i} />)}
+                    <ComingSoonRow count={comingSoonCount} />
                 </div>
-                <h2
-                    style={{
-                        fontSize: "clamp(2rem, 4vw, 3rem)",
-                        fontWeight: 800,
-                        marginBottom: "0.75rem",
-                        letterSpacing: "-0.02em",
-                    }}
-                >
-                    Things I&apos;ve{" "}
-                    <span className="text-gradient">Built</span>
-                </h2>
-                <p style={{ color: "var(--color-text-muted)", marginBottom: "3rem", maxWidth: 520 }}>
-                    A showcase of AI-powered tools, IoT systems, and full-stack applications — with more coming soon.
-                </p>
-            </motion.div>
-
-            {/* Project Grid */}
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                    gap: "1.5rem",
-                }}
-            >
-                {projects.map((project, index) => (
-                    <ProjectCard key={project.id} project={project} index={index} />
-                ))}
             </div>
-
-            {/* Admin Link */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.6, duration: 0.6 }}
-                style={{ textAlign: "center", marginTop: "3rem" }}
-            >
-                <a
-                    href="/admin"
-                    className="btn-outline"
-                    style={{ textDecoration: "none", display: "inline-flex", opacity: 0.4, fontSize: "0.8rem" }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.4")}
-                >
-                    Manage Projects
-                </a>
-            </motion.div>
         </section>
     );
 }
