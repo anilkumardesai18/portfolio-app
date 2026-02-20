@@ -142,10 +142,10 @@ export default function HeroSection() {
                         Hi, I&apos;m{" "}
                         <span
                             className="glitch"
-                            data-text="Anil Kumar"
+                            data-text="Anil Kumar Desai"
                             style={{ display: "inline-block" }}
                         >
-                            <span className="text-gradient">Anil Kumar</span>
+                            <span className="text-gradient">Anil Kumar Desai</span>
                         </span>
                     </motion.h1>
 
@@ -205,8 +205,8 @@ export default function HeroSection() {
                     {/* Social Links */}
                     <motion.div variants={itemVariants} style={{ display: "flex", gap: "1rem" }}>
                         {[
-                            { Icon: Github, href: "https://github.com", label: "GitHub" },
-                            { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+                            { Icon: Github, href: "https://github.com/anilkumardesai18", label: "GitHub" },
+                            { Icon: Linkedin, href: "https://www.linkedin.com/in/anil-kumar-desai-b3818b32b", label: "LinkedIn" },
                             { Icon: Mail, href: "mailto:anilkumardesai18@gmail.com", label: "Email" },
                         ].map(({ Icon, href, label }) => (
                             <a
