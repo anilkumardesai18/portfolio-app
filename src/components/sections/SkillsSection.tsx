@@ -3,167 +3,215 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const skills = [
-    { name: "Python", icon: "🐍", color: "#6378ff", desc: "Data, scripting & AI" },
-    { name: "Gen AI / Google AI API", icon: "🤖", color: "#a855f7", desc: "Prompt Eng · API Integration" },
-    { name: "Next.js & React", icon: "⚡", color: "#22d3ee", desc: "Full-stack web apps" },
-    { name: "SQL & Data Analytics", icon: "📊", color: "#f59e0b", desc: "Excel · Reporting" },
-    { name: "Computer Vision", icon: "👁️", color: "#ec4899", desc: "OpenCV · Detection" },
-    { name: "IoT & Raspberry Pi", icon: "🔌", color: "#22c55e", desc: "Hardware · GPIO" },
-    { name: "JavaScript / Node.js", icon: "🟡", color: "#f59e0b", desc: "Backend APIs" },
-    { name: "Prompt Engineering", icon: "✨", color: "#a855f7", desc: "Structured prompts" },
-    { name: "VS Code & Linux", icon: "🛠️", color: "#6378ff", desc: "Dev environments" },
-];
+type Skill = { name: string; level: number; color: string };
 
-const certifications = [
-    { name: "AI Essentials & Prompt Eng.", org: "Self-paced", color: "#a855f7" },
-    { name: "Data Analytics: SQL, Excel, Python", org: "Tutedude", color: "#f59e0b" },
-    { name: "Deloitte Data Analytics", org: "Virtual Experience", color: "#22d3ee" },
-    { name: "Android App Dev", org: "MindMatrix", color: "#22c55e" },
-    { name: "AI/ML Training", org: "Apna College", color: "#6378ff" },
+const skillCategories = [
+    {
+        title: "Languages & Data",
+        icon: "⌨️",
+        skills: [
+            { name: "Python", level: 80, color: "#6378ff" },
+            { name: "SQL", level: 75, color: "#a855f7" },
+            { name: "JavaScript / Node.js", level: 70, color: "#f59e0b" },
+        ],
+    },
+    {
+        title: "AI & Technologies",
+        icon: "🤖",
+        skills: [
+            { name: "Generative AI (Google AI API)", level: 82, color: "#6378ff" },
+            { name: "Prompt Engineering", level: 85, color: "#a855f7" },
+            { name: "API Integration", level: 80, color: "#22d3ee" },
+            { name: "OpenCV / Computer Vision", level: 70, color: "#f59e0b" },
+        ],
+    },
+    {
+        title: "Tools & Platforms",
+        icon: "🛠️",
+        skills: [
+            { name: "Raspberry Pi / IoT", level: 72, color: "#6378ff" },
+            { name: "VS Code / Linux", level: 85, color: "#a855f7" },
+            { name: "Next.js / React", level: 68, color: "#22d3ee" },
+            { name: "Excel / Data Analytics", level: 75, color: "#f59e0b" },
+        ],
+    },
 ];
 
 const techMarquee = [
     "Python", "SQL", "Gen AI", "Google AI API", "Prompt Engineering",
     "OpenCV", "Raspberry Pi", "Node.js", "Next.js", "React",
-    "API Integration", "VS Code", "Linux", "Excel",
-    "Data Analytics", "IoT", "TypeScript", "JavaScript",
-    "Python", "SQL", "Gen AI", "Google AI API", "Prompt Engineering",
-    "OpenCV", "Raspberry Pi", "Node.js", "Next.js", "React",
-    "API Integration", "VS Code", "Linux", "Excel",
-    "Data Analytics", "IoT", "TypeScript", "JavaScript",
+    "API Integration", "VS Code", "Linux", "Windows", "Excel",
+    "Data Analytics", "IoT", "TypeScript",
 ];
 
-function SkillTile({ skill, index }: { skill: typeof skills[0]; index: number }) {
+function SkillBar({ skill, index }: { skill: Skill; index: number }) {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true });
+    const isInView = useInView(ref, { once: true });
 
     return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
-            className="bento-card"
-            style={{ padding: "1.4rem 1.25rem", cursor: "default" }}
-            onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = skill.color + "55";
-                el.style.boxShadow = `0 0 28px ${skill.color}22`;
-                el.style.transform = "translateY(-4px)";
-            }}
-            onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "var(--color-border)";
-                el.style.boxShadow = "none";
-                el.style.transform = "translateY(0)";
-            }}
-        >
-            {/* Color accent top bar */}
-            <div style={{
-                position: "absolute", top: 0, left: 0, right: 0, height: 2,
-                background: skill.color,
-                borderRadius: "16px 16px 0 0",
-                opacity: 0.7,
-            }} />
-            <div style={{ fontSize: "1.75rem", marginBottom: "0.6rem", lineHeight: 1 }}>{skill.icon}</div>
-            <div style={{ fontWeight: 650, fontSize: "0.92rem", color: "var(--color-text)", marginBottom: "0.3rem", lineHeight: 1.3 }}>
-                {skill.name}
+        <div ref={ref} style={{ marginBottom: "1.25rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <span style={{ fontSize: "0.875rem", color: "var(--color-text)", fontWeight: 500 }}>
+                    {skill.name}
+                </span>
+                <span
+                    style={{
+                        fontSize: "0.75rem",
+                        fontFamily: "var(--font-mono)",
+                        color: skill.color,
+                        fontWeight: 700,
+                    }}
+                >
+                    {skill.level}%
+                </span>
             </div>
-            <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}>
-                {skill.desc}
+            <div
+                style={{
+                    height: 6,
+                    background: "rgba(255,255,255,0.06)",
+                    borderRadius: 99,
+                    overflow: "hidden",
+                }}
+            >
+                <motion.div
+                    initial={{ width: 0 }}
+                    animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
+                    transition={{ duration: 1.2, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    className="skill-bar-fill"
+                    style={{
+                        background: `linear-gradient(90deg, ${skill.color}99, ${skill.color})`,
+                    }}
+                />
             </div>
-        </motion.div>
+        </div>
     );
 }
 
 export default function SkillsSection() {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: "-80px" });
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="skills" style={{ padding: "var(--section-padding) clamp(1.5rem, 5vw, 4rem)" }} className="section-gradient">
-            <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <section
+            id="skills"
+            ref={ref}
+            style={{
+                padding: "var(--section-padding) clamp(1.5rem, 5vw, 4rem)",
+                background: "var(--color-bg-secondary)",
+                position: "relative",
+                overflow: "hidden",
+            }}
+        >
+            {/* Grid bg */}
+            <div
+                className="grid-bg"
+                style={{ position: "absolute", inset: 0, opacity: 0.5, pointerEvents: "none" }}
+            />
 
-                {/* Header */}
+            <div style={{ maxWidth: 1320, margin: "0 auto", position: "relative", zIndex: 1 }}>
+                {/* Label */}
                 <motion.div
-                    ref={ref}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    style={{ textAlign: "center", marginBottom: "3.5rem" }}
                 >
-                    <div className="section-label" style={{ margin: "0 auto 1rem" }}>
-                        <span>⚙️</span> Skills
+                    <div className="section-label">
+                        <span>02</span>
+                        <span>Skills &amp; Technologies</span>
                     </div>
-                    <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: "0.75rem" }}>
-                        Tools of My <span className="text-gradient">Trade</span>
+                    <h2
+                        style={{
+                            fontSize: "clamp(2rem, 4vw, 3rem)",
+                            fontWeight: 800,
+                            marginBottom: "0.75rem",
+                            letterSpacing: "-0.02em",
+                        }}
+                    >
+                        My <span className="text-gradient">Technical Arsenal</span>
                     </h2>
-                    <p style={{ color: "var(--color-text-muted)", maxWidth: 480, margin: "0 auto", fontSize: "0.95rem", lineHeight: 1.7 }}>
-                        A blend of AI, web, and hardware — everything I use to build real-world solutions.
+                    <p style={{ color: "var(--color-text-muted)", marginBottom: "3rem", maxWidth: 520 }}>
+                        From AI APIs and Python to IoT hardware and data analytics — tools I use to build impactful products.
                     </p>
                 </motion.div>
 
-                {/* Bento Grid */}
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))",
-                    gap: "1rem",
-                    marginBottom: "2.5rem",
-                }}>
-                    {skills.map((s, i) => <SkillTile key={s.name} skill={s} index={i} />)}
-                </div>
-
-                {/* Certifications strip */}
-                <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.5, delay: 0.4 }}
+                {/* Skill Grids */}
+                <div
                     style={{
-                        background: "var(--color-surface)",
-                        border: "1px solid var(--color-border)",
-                        borderRadius: 16,
-                        padding: "1.5rem 1.75rem",
-                        marginBottom: "2.5rem",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                        gap: "1.5rem",
+                        marginBottom: "4rem",
                     }}
                 >
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.1rem" }}>
-                        <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-text-muted)" }}>
-                            🎓 Certifications &amp; Training
-                        </span>
-                    </div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-                        {certifications.map((c) => (
-                            <div key={c.name} style={{
-                                display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                                padding: "0.4rem 0.9rem",
-                                border: `1px solid ${c.color}33`,
-                                borderRadius: 8,
-                                background: `${c.color}0d`,
-                            }}>
-                                <span style={{ width: 6, height: 6, borderRadius: "50%", background: c.color, flexShrink: 0 }} />
-                                <span style={{ fontSize: "0.8rem", fontWeight: 500, color: "var(--color-text)" }}>{c.name}</span>
-                                <span style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}>· {c.org}</span>
+                    {skillCategories.map((cat, ci) => (
+                        <motion.div
+                            key={cat.title}
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.6, delay: ci * 0.15 }}
+                            className="glass-card"
+                            style={{ padding: "1.75rem" }}
+                        >
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                                <span style={{ fontSize: "1.5rem" }}>{cat.icon}</span>
+                                <h3 style={{ fontWeight: 700, fontSize: "1.1rem" }}>{cat.title}</h3>
                             </div>
-                        ))}
-                    </div>
-                </motion.div>
+                            {cat.skills.map((skill, i) => (
+                                <SkillBar key={skill.name} skill={skill} index={i} />
+                            ))}
+                        </motion.div>
+                    ))}
+                </div>
 
                 {/* Marquee */}
-                <div style={{ overflow: "hidden", borderRadius: 12 }}>
-                    <div className="marquee-track" style={{ gap: "2rem" }}>
-                        {techMarquee.map((t, i) => (
-                            <span key={i} style={{
-                                whiteSpace: "nowrap",
-                                fontSize: "0.78rem",
-                                fontFamily: "var(--font-mono)",
-                                color: "var(--color-text-muted)",
-                                display: "flex", alignItems: "center", gap: "1.5rem",
-                            }}>
-                                {t}
-                                <span style={{ color: "var(--color-text-subtle)", fontSize: "0.6rem" }}>◆</span>
-                            </span>
-                        ))}
+                <div style={{ overflow: "hidden", padding: "1rem 0" }}>
+                    <p
+                        style={{
+                            textAlign: "center",
+                            fontSize: "0.75rem",
+                            letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            fontFamily: "var(--font-mono)",
+                            color: "var(--color-text-subtle)",
+                            marginBottom: "1.5rem",
+                        }}
+                    >
+                        Technologies I&apos;ve worked with
+                    </p>
+                    <div style={{ overflow: "hidden" }}>
+                        <div className="marquee-track">
+                            {[...techMarquee, ...techMarquee].map((tech, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "0.75rem",
+                                        padding: "0.5rem 1.5rem",
+                                        margin: "0 0.5rem",
+                                        background: "rgba(99,120,255,0.06)",
+                                        border: "1px solid rgba(99,120,255,0.12)",
+                                        borderRadius: 8,
+                                        fontSize: "0.875rem",
+                                        fontWeight: 600,
+                                        color: "var(--color-text-muted)",
+                                        whiteSpace: "nowrap",
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            width: 6,
+                                            height: 6,
+                                            borderRadius: "50%",
+                                            background: "var(--color-primary)",
+                                            flexShrink: 0,
+                                        }}
+                                    />
+                                    {tech}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
