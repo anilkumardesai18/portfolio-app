@@ -3,182 +3,166 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-type Skill = { name: string; level: number; color: string };
+type BentoCell = {
+    title: string;
+    icon: string;
+    span: number;
+    featured?: string;
+    chips: string[];
+};
 
-const skillCategories = [
+const bento: BentoCell[] = [
     {
-        title: "Languages & Data",
+        title: "Languages",
         icon: "⌨️",
-        skills: [
-            { name: "Python", level: 80, color: "#6378ff" },
-            { name: "SQL", level: 75, color: "#a855f7" },
-            { name: "JavaScript / Node.js", level: 70, color: "#f59e0b" },
-        ],
+        span: 7,
+        featured: "Kotlin  ·  Python",
+        chips: ["JavaScript", "TypeScript", "HTML", "CSS"],
     },
     {
-        title: "AI & Technologies",
+        title: "AI & Gen AI",
         icon: "🤖",
-        skills: [
-            { name: "Generative AI (Google AI API)", level: 82, color: "#6378ff" },
-            { name: "Prompt Engineering", level: 85, color: "#a855f7" },
-            { name: "API Integration", level: 80, color: "#22d3ee" },
-            { name: "OpenCV / Computer Vision", level: 70, color: "#f59e0b" },
-        ],
+        span: 5,
+        featured: "Google AI API",
+        chips: ["Prompt Engineering", "OpenCV", "Computer Vision", "Machine Learning"],
     },
     {
-        title: "Tools & Platforms",
+        title: "Mobile Dev",
+        icon: "📱",
+        span: 4,
+        featured: "Android (Kotlin)",
+        chips: ["Jetpack Compose", "React Native", "Health Connect", "Wearable APIs"],
+    },
+    {
+        title: "Web & Frontend",
+        icon: "🌐",
+        span: 4,
+        featured: "Next.js  ·  React",
+        chips: ["Tailwind CSS", "Framer Motion", "TypeScript", "Responsive Design"],
+    },
+    {
+        title: "Backend",
+        icon: "⚙️",
+        span: 4,
+        featured: "Node.js  ·  Express",
+        chips: ["REST APIs", "Firebase", "Supabase", "Google Cloud"],
+    },
+    {
+        title: "Databases",
+        icon: "🗄️",
+        span: 5,
+        featured: "SQL  ·  PostgreSQL",
+        chips: ["Supabase", "Firebase", "Render", "Google Cloud"],
+    },
+    {
+        title: "IoT & Hardware",
+        icon: "🔌",
+        span: 4,
+        featured: "Raspberry Pi",
+        chips: ["OpenCV", "Computer Vision", "Python", "Linux"],
+    },
+    {
+        title: "Workflow",
         icon: "🛠️",
-        skills: [
-            { name: "Raspberry Pi / IoT", level: 72, color: "#6378ff" },
-            { name: "VS Code / Linux", level: 85, color: "#a855f7" },
-            { name: "Next.js / React", level: 68, color: "#22d3ee" },
-            { name: "Excel / Data Analytics", level: 75, color: "#f59e0b" },
-        ],
+        span: 3,
+        featured: "VS Code",
+        chips: ["Android Studio", "Git", "Linux", "Windows"],
     },
 ];
 
 const techMarquee = [
-    "Python", "SQL", "Gen AI", "Google AI API", "Prompt Engineering",
-    "OpenCV", "Raspberry Pi", "Node.js", "Next.js", "React",
-    "API Integration", "VS Code", "Linux", "Windows", "Excel",
-    "Data Analytics", "IoT", "TypeScript",
+    "Python", "Kotlin", "SQL", "PostgreSQL", "JavaScript", "TypeScript",
+    "Next.js", "React", "Node.js", "Express", "React Native",
+    "Gen AI", "Google AI API", "Prompt Engineering", "OpenCV",
+    "Raspberry Pi", "IoT", "Firebase", "Supabase", "Google Cloud",
+    "Render", "Tailwind CSS", "Jetpack Compose", "Android Studio",
+    "VS Code", "Linux", "Excel", "Data Analytics", "Git",
 ];
-
-function SkillBar({ skill, index }: { skill: Skill; index: number }) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
-
-    return (
-        <div ref={ref} style={{ marginBottom: "1.25rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                <span style={{ fontSize: "0.875rem", color: "var(--color-text)", fontWeight: 500 }}>
-                    {skill.name}
-                </span>
-                <span
-                    style={{
-                        fontSize: "0.75rem",
-                        fontFamily: "var(--font-mono)",
-                        color: skill.color,
-                        fontWeight: 700,
-                    }}
-                >
-                    {skill.level}%
-                </span>
-            </div>
-            <div
-                style={{
-                    height: 6,
-                    background: "rgba(255,255,255,0.06)",
-                    borderRadius: 99,
-                    overflow: "hidden",
-                }}
-            >
-                <motion.div
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
-                    transition={{ duration: 1.2, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    className="skill-bar-fill"
-                    style={{
-                        background: `linear-gradient(90deg, ${skill.color}99, ${skill.color})`,
-                    }}
-                />
-            </div>
-        </div>
-    );
-}
 
 export default function SkillsSection() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section
-            id="skills"
-            ref={ref}
-            style={{
-                padding: "var(--section-padding) clamp(1.5rem, 5vw, 4rem)",
-                background: "var(--color-bg-secondary)",
-                position: "relative",
-                overflow: "hidden",
-            }}
-        >
-            {/* Grid bg */}
-            <div
-                className="grid-bg"
-                style={{ position: "absolute", inset: 0, opacity: 0.5, pointerEvents: "none" }}
-            />
+        <section id="skills" className="section" ref={ref}>
+            <div className="section-num">02</div>
 
-            <div style={{ maxWidth: 1320, margin: "0 auto", position: "relative", zIndex: 1 }}>
-                {/* Label */}
+            <div className="container" style={{ position: "relative", zIndex: 1 }}>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
+                    style={{ marginBottom: "3.5rem" }}
                 >
-                    <div className="section-label">
-                        <span>02</span>
-                        <span>Skills &amp; Technologies</span>
-                    </div>
-                    <h2
-                        style={{
-                            fontSize: "clamp(2rem, 4vw, 3rem)",
-                            fontWeight: 800,
-                            marginBottom: "0.75rem",
-                            letterSpacing: "-0.02em",
-                        }}
-                    >
-                        My <span className="text-gradient">Technical Arsenal</span>
+                    <div className="label-tag">Skills &amp; Technologies</div>
+                    <h2 className="display" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", marginBottom: "0.75rem", textTransform: "uppercase" }}>
+                        My Technical <br /><span style={{ color: "var(--red)" }}>Arsenal</span>
                     </h2>
-                    <p style={{ color: "var(--color-text-muted)", marginBottom: "3rem", maxWidth: 520 }}>
-                        From AI APIs and Python to IoT hardware and data analytics — tools I use to build impactful products.
+                    <p style={{ color: "var(--muted)", maxWidth: 520, lineHeight: 1.7, fontWeight: 500 }}>
+                        From AI APIs and Kotlin to IoT hardware — tools I use to build impactful products across web, mobile, and embedded systems.
                     </p>
                 </motion.div>
 
-                {/* Skill Grids */}
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                        gap: "1.5rem",
-                        marginBottom: "4rem",
-                    }}
-                >
-                    {skillCategories.map((cat, ci) => (
+                {/* BENTO GRID - Brutalist styling */}
+                <div className="bento-grid" style={{ marginBottom: "5rem" }}>
+                    {bento.map((cell, i) => (
                         <motion.div
-                            key={cat.title}
-                            initial={{ opacity: 0, y: 40 }}
+                            key={cell.title}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.6, delay: ci * 0.15 }}
-                            className="glass-card"
-                            style={{ padding: "1.75rem" }}
+                            transition={{ duration: 0.5, delay: i * 0.05 }}
+                            className="bento-cell"
+                            style={{
+                                gridColumn: `span ${cell.span}`,
+                                padding: "2rem",
+                                position: "relative",
+                                overflow: "hidden",
+                                minWidth: 0,
+                                display: "flex",
+                                flexDirection: "column",
+                            }}
                         >
                             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
-                                <span style={{ fontSize: "1.5rem" }}>{cat.icon}</span>
-                                <h3 style={{ fontWeight: 700, fontSize: "1.1rem" }}>{cat.title}</h3>
+                                <span style={{ fontSize: "1.5rem", filter: "grayscale(100%) brightness(0%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)", opacity: 0.9 }}>{cell.icon}</span>
+                                <h3 className="font-mono" style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--red)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                    {cell.title}
+                                </h3>
                             </div>
-                            {cat.skills.map((skill, i) => (
-                                <SkillBar key={skill.name} skill={skill} index={i} />
-                            ))}
+
+                            {cell.featured && (
+                                <div
+                                    className="display"
+                                    style={{
+                                        fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                                        color: "var(--text)",
+                                        marginBottom: "1.5rem",
+                                    }}
+                                >
+                                    {cell.featured}
+                                </div>
+                            )}
+
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "auto" }}>
+                                {cell.chips.map((chip) => (
+                                    <span key={chip} className="chip">{chip}</span>
+                                ))}
+                            </div>
                         </motion.div>
                     ))}
                 </div>
 
                 {/* Marquee */}
-                <div style={{ overflow: "hidden", padding: "1rem 0" }}>
-                    <p
-                        style={{
-                            textAlign: "center",
-                            fontSize: "0.75rem",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--color-text-subtle)",
-                            marginBottom: "1.5rem",
-                        }}
-                    >
-                        Technologies I&apos;ve worked with
-                    </p>
-                    <div style={{ overflow: "hidden" }}>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : {}}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                    <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+                        <span className="font-mono" style={{ fontSize: "0.75rem", color: "var(--red)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em" }}>
+                            Technologies Overview
+                        </span>
+                    </div>
+                    <div className="marquee-wrap">
                         <div className="marquee-track">
                             {[...techMarquee, ...techMarquee].map((tech, i) => (
                                 <div
@@ -187,33 +171,22 @@ export default function SkillsSection() {
                                         display: "inline-flex",
                                         alignItems: "center",
                                         gap: "0.75rem",
-                                        padding: "0.5rem 1.5rem",
-                                        margin: "0 0.5rem",
-                                        background: "rgba(99,120,255,0.06)",
-                                        border: "1px solid rgba(99,120,255,0.12)",
-                                        borderRadius: 8,
-                                        fontSize: "0.875rem",
-                                        fontWeight: 600,
-                                        color: "var(--color-text-muted)",
+                                        padding: "0 1.5rem",
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: "1.2rem",
+                                        fontWeight: 700,
+                                        color: "var(--text)",
+                                        textTransform: "uppercase",
                                         whiteSpace: "nowrap",
-                                        flexShrink: 0,
                                     }}
                                 >
-                                    <span
-                                        style={{
-                                            width: 6,
-                                            height: 6,
-                                            borderRadius: "50%",
-                                            background: "var(--color-primary)",
-                                            flexShrink: 0,
-                                        }}
-                                    />
+                                    <span style={{ color: "var(--red)" }}>/</span>
                                     {tech}
                                 </div>
                             ))}
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

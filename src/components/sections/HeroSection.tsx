@@ -2,35 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Download, Terminal, Mail } from "lucide-react";
-import dynamic from "next/dynamic";
-
-const HeroScene = dynamic(() => import("@/components/3d/HeroScene"), { ssr: false });
+import { ArrowDown, Github, Linkedin, Download, Mail } from "lucide-react";
+import BrutalistShape from "@/components/3d/BrutalistShape";
 
 const roles = [
-    "AI-Powered Web Developer",
+    "Full Stack Developer",
+    "Android & Mobile Developer",
     "Gen AI & Prompt Engineer",
+    "AI-Powered Web Developer",
     "IoT & Computer Vision",
-    "Data Analytics (SQL)",
-    "NCC Certified Leader",
 ];
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.12, delayChildren: 0.3 },
-    },
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.7, ease: "easeOut" as const },
-    },
-};
 
 export default function HeroSection() {
     const [roleIndex, setRoleIndex] = useState(0);
@@ -41,20 +22,18 @@ export default function HeroSection() {
     useEffect(() => {
         const current = roles[roleIndex];
         let timeout: ReturnType<typeof setTimeout>;
-
         if (!isDeleting && charIdx <= current.length) {
             setDisplayText(current.slice(0, charIdx));
-            timeout = setTimeout(() => setCharIdx((c) => c + 1), 90);
+            timeout = setTimeout(() => setCharIdx((c) => c + 1), 85);
         } else if (!isDeleting && charIdx > current.length) {
-            timeout = setTimeout(() => setIsDeleting(true), 1800);
+            timeout = setTimeout(() => setIsDeleting(true), 2200);
         } else if (isDeleting && charIdx > 0) {
             setDisplayText(current.slice(0, charIdx));
-            timeout = setTimeout(() => setCharIdx((c) => c - 1), 45);
+            timeout = setTimeout(() => setCharIdx((c) => c - 1), 40);
         } else {
             setIsDeleting(false);
             setRoleIndex((i) => (i + 1) % roles.length);
         }
-
         return () => clearTimeout(timeout);
     }, [charIdx, isDeleting, roleIndex]);
 
@@ -70,99 +49,44 @@ export default function HeroSection() {
             }}
             className="grid-bg"
         >
-            <div className="hero-gradient" style={{ position: "absolute", inset: 0 }} />
-            <HeroScene />
-            <div className="scan-line" />
-
-            <div
-                style={{
-                    position: "relative",
-                    zIndex: 10,
-                    maxWidth: 1320,
-                    margin: "0 auto",
-                    padding: "0 clamp(1.5rem, 5vw, 4rem)",
-                    width: "100%",
-                    paddingTop: "6rem",
-                }}
-            >
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    style={{ maxWidth: 700 }}
-                >
-                    {/* Badge */}
-                    <motion.div variants={itemVariants}>
-                        <div
+            <div className="container" style={{ position: "relative", zIndex: 10, paddingTop: "7rem" }}>
+                <div style={{ maxWidth: 800 }}>
+                    {/* Main heading */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7, delay: 0.1 }}
+                    >
+                        <h1
+                            className="display"
                             style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "0.5rem",
-                                padding: "0.35rem 1rem",
-                                background: "rgba(99,120,255,0.1)",
-                                border: "1px solid rgba(99,120,255,0.25)",
-                                borderRadius: 99,
+                                fontSize: "clamp(3.5rem, 9vw, 8rem)",
+                                lineHeight: 0.95,
                                 marginBottom: "1.5rem",
-                                fontSize: "0.75rem",
-                                fontFamily: "var(--font-mono)",
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
                                 textTransform: "uppercase",
-                                color: "var(--color-primary)",
                             }}
                         >
-                            <Terminal size={12} />
-                            <span>Open to Opportunities</span>
-                            <span
-                                style={{
-                                    display: "inline-block",
-                                    width: 7,
-                                    height: 7,
-                                    borderRadius: "50%",
-                                    background: "#22c55e",
-                                    boxShadow: "0 0 8px #22c55e",
-                                    animation: "pulse 2s infinite",
-                                }}
-                            />
-                        </div>
+                            Anil<br />
+                            <span style={{ color: "var(--red)" }}>Kumar</span><br />
+                            Desai
+                        </h1>
                     </motion.div>
 
-                    {/* Name */}
-                    <motion.h1
-                        variants={itemVariants}
-                        style={{
-                            fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
-                            fontWeight: 800,
-                            lineHeight: 1.05,
-                            marginBottom: "0.75rem",
-                            letterSpacing: "-0.03em",
-                            color: "var(--color-text)",
-                        }}
-                    >
-                        Hi, I&apos;m{" "}
-                        <span
-                            className="glitch"
-                            data-text="Anil Kumar Desai"
-                            style={{ display: "inline-block" }}
-                        >
-                            <span className="text-gradient">Anil Kumar Desai</span>
-                        </span>
-                    </motion.h1>
-
-                    {/* Typewriter Role */}
+                    {/* Typewriter role */}
                     <motion.div
-                        variants={itemVariants}
-                        style={{
-                            fontSize: "clamp(1.1rem, 3vw, 1.75rem)",
-                            fontWeight: 500,
-                            color: "var(--color-text-muted)",
-                            marginBottom: "1.5rem",
-                            height: "2.2rem",
-                        }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        style={{ marginBottom: "2rem", height: "2rem" }}
                     >
                         <span
-                            className="text-gradient typing-cursor"
-                            style={{ fontFamily: "var(--font-mono)" }}
+                            className="typing-cursor font-mono"
+                            style={{
+                                fontSize: "clamp(1rem, 3vw, 1.5rem)",
+                                fontWeight: 700,
+                                color: "var(--red)",
+                                textTransform: "uppercase",
+                            }}
                         >
                             {displayText}
                         </span>
@@ -170,40 +94,50 @@ export default function HeroSection() {
 
                     {/* Description */}
                     <motion.p
-                        variants={itemVariants}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
                         style={{
-                            fontSize: "1rem",
-                            lineHeight: 1.75,
-                            color: "var(--color-text-muted)",
-                            maxWidth: 520,
+                            fontSize: "1.1rem",
+                            lineHeight: 1.7,
+                            color: "var(--muted)",
+                            maxWidth: 580,
                             marginBottom: "2.5rem",
+                            fontWeight: 500,
                         }}
                     >
-                        A tech enthusiast skilled in AI-powered web development, data analytics,
-                        and IoT — building real-world solutions with Google AI, OpenCV, and Node.js.
-                        Currently advancing with Google AI & Prompt Engineering training.
+                        A tech enthusiast skilled in AI-powered web &amp; Android development,
+                        data analytics, and IoT. Interned at MindMatrix, freelancing in full-stack
+                        development — currently advancing with Google AI &amp; Prompt Engineering.
                     </motion.p>
 
                     {/* CTAs */}
                     <motion.div
-                        variants={itemVariants}
-                        style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "3rem" }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "3.5rem" }}
                     >
                         <button
-                            className="btn-primary"
+                            className="btn btn-primary"
                             onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
                         >
                             View Projects
-                            <ArrowDown size={16} />
+                            <ArrowDown size={15} />
                         </button>
-                        <a href="/resume.pdf" download className="btn-outline" style={{ textDecoration: "none" }}>
-                            <Download size={16} />
+                        <a href="/resume.pdf" download className="btn btn-outline">
+                            <Download size={15} />
                             Resume
                         </a>
                     </motion.div>
 
-                    {/* Social Links */}
-                    <motion.div variants={itemVariants} style={{ display: "flex", gap: "1rem" }}>
+                    {/* Social icons */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        style={{ display: "flex", gap: "1rem", alignItems: "center" }}
+                    >
                         {[
                             { Icon: Github, href: "https://github.com/anilkumardesai18", label: "GitHub" },
                             { Icon: Linkedin, href: "https://www.linkedin.com/in/anil-kumar-desai-b3818b32b", label: "LinkedIn" },
@@ -216,81 +150,57 @@ export default function HeroSection() {
                                 rel="noopener noreferrer"
                                 aria-label={label}
                                 style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: 44,
-                                    height: 44,
-                                    borderRadius: 10,
-                                    border: "1px solid var(--color-border)",
-                                    color: "var(--color-text-muted)",
-                                    textDecoration: "none",
-                                    transition: "all 0.3s",
+                                    width: 44, height: 44,
+                                    border: "1px solid var(--border)",
+                                    color: "var(--red)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    transition: "all 0.2s",
+                                    background: "var(--surface)",
                                 }}
                                 onMouseEnter={(e) => {
-                                    const el = e.currentTarget;
-                                    el.style.borderColor = "var(--color-primary)";
-                                    el.style.color = "var(--color-primary)";
-                                    el.style.background = "rgba(99,120,255,0.08)";
-                                    el.style.boxShadow = "0 0 15px rgba(99,120,255,0.2)";
+                                    e.currentTarget.style.background = "var(--red)";
+                                    e.currentTarget.style.color = "var(--surface)";
+                                    e.currentTarget.style.transform = "translate(-2px, -2px)";
+                                    e.currentTarget.style.boxShadow = "2px 2px 0px var(--border)";
                                 }}
                                 onMouseLeave={(e) => {
-                                    const el = e.currentTarget;
-                                    el.style.borderColor = "var(--color-border)";
-                                    el.style.color = "var(--color-text-muted)";
-                                    el.style.background = "transparent";
-                                    el.style.boxShadow = "none";
+                                    e.currentTarget.style.background = "var(--surface)";
+                                    e.currentTarget.style.color = "var(--red)";
+                                    e.currentTarget.style.transform = "translate(0, 0)";
+                                    e.currentTarget.style.boxShadow = "none";
                                 }}
                             >
-                                <Icon size={18} />
+                                <Icon size={20} />
                             </a>
                         ))}
                     </motion.div>
-                </motion.div>
-
-                {/* Scroll indicator */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2 }}
-                    style={{
-                        position: "absolute",
-                        bottom: "2.5rem",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                    }}
-                >
-                    <span
-                        style={{
-                            fontSize: "0.7rem",
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--color-text-subtle)",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                        }}
-                    >
-                        Scroll to explore
-                    </span>
-                    <motion.div
-                        animate={{ y: [0, 8, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                        style={{ color: "var(--color-primary)" }}
-                    >
-                        <ArrowDown size={18} />
-                    </motion.div>
-                </motion.div>
+                </div>
             </div>
 
-            <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-      `}</style>
+            {/* Huge background text decoration */}
+            <div
+                className="font-display"
+                style={{
+                    position: "absolute",
+                    right: "-10%",
+                    bottom: "-10%",
+                    fontSize: "clamp(20rem, 40vw, 40rem)",
+                    fontWeight: 900,
+                    lineHeight: 0.8,
+                    color: "transparent",
+                    WebkitTextStroke: "2px var(--border-light)",
+                    zIndex: 0,
+                    pointerEvents: "none",
+                    userSelect: "none",
+                }}
+            >
+                DEV
+            </div>
+
+            {/* Brutalist 3D Wireframe */}
+            <div style={{ position: "absolute", right: "5%", top: "50%", transform: "translateY(-50%)", width: "40vw", height: "60vh", minWidth: 300, minHeight: 300, zIndex: 1, pointerEvents: "none", opacity: 0.7 }} className="hidden md:block">
+                <BrutalistShape />
+            </div>
         </section>
     );
 }

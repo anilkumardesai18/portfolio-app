@@ -204,7 +204,7 @@ function ProjectEditor({
         const updated: Project = {
             ...local,
             tags: tagsInput.split(",").map((t) => t.trim()).filter(Boolean),
-            gradient: colorToGradient(local.color),
+            gradient: colorToGradient(local.color ?? "#6378ff"),
             comingSoon: !local.title.trim(),
         };
         onChange(updated);

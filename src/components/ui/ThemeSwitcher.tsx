@@ -3,129 +3,109 @@
 import { useState } from "react";
 import { Palette, X } from "lucide-react";
 
-const themes = [
-    { name: "Indigo (Default)", primary: "#6378ff", secondary: "#a855f7", accent: "#22d3ee" },
-    { name: "Emerald Tech", primary: "#10b981", secondary: "#06b6d4", accent: "#f59e0b" },
-    { name: "Rose Gold", primary: "#f43f5e", secondary: "#ec4899", accent: "#f59e0b" },
-    { name: "Amber", primary: "#f59e0b", secondary: "#f97316", accent: "#22d3ee" },
-    { name: "Cyan", primary: "#22d3ee", secondary: "#6378ff", accent: "#a855f7" },
+const accents = [
+    { name: "Cyan (Default)", cyan: "#00CFFF", amber: "#FF9F1C" },
+    { name: "Emerald", cyan: "#10B981", amber: "#F59E0B" },
+    { name: "Violet", cyan: "#8B5CF6", amber: "#EC4899" },
+    { name: "Orange", cyan: "#FF6B35", amber: "#FFAA00" },
+    { name: "Rose", cyan: "#F43F5E", amber: "#FB923C" },
 ];
 
 export default function ThemeSwitcher() {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState(0);
 
-    const applyTheme = (theme: (typeof themes)[0], index: number) => {
+    const applyAccent = (a: (typeof accents)[0], i: number) => {
         const root = document.documentElement;
-        root.style.setProperty("--color-primary", theme.primary);
-        root.style.setProperty("--color-primary-glow", theme.primary + "66");
-        root.style.setProperty("--color-secondary", theme.secondary);
-        root.style.setProperty("--color-accent", theme.accent);
-        root.style.setProperty(
-            "--gradient-primary",
-            `linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%)`
-        );
-        setActive(index);
+        root.style.setProperty("--cyan", a.cyan);
+        root.style.setProperty("--cyan-dim", a.cyan + "18");
+        root.style.setProperty("--border-cyan", a.cyan + "30");
+        root.style.setProperty("--border-hover", a.cyan + "48");
+        root.style.setProperty("--amber", a.amber);
+        root.style.setProperty("--amber-dim", a.amber + "20");
+        setActive(i);
     };
 
     return (
         <div
             style={{
                 position: "fixed",
-                right: "1.5rem",
-                bottom: "2rem",
+                right: "1.25rem",
+                bottom: "1.75rem",
                 zIndex: 8990,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-end",
-                gap: "0.75rem",
+                gap: "0.6rem",
             }}
         >
             {/* Panel */}
             {open && (
                 <div
-                    className="glass"
                     style={{
-                        borderRadius: 16,
+                        background: "var(--surface)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "var(--radius-md)",
                         padding: "1.25rem",
-                        width: 220,
-                        border: "1px solid rgba(99,120,255,0.2)",
-                        boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+                        width: 200,
+                        boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
                     }}
                 >
                     <div
-                        style={{
-                            fontSize: "0.75rem",
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--color-text-muted)",
-                            marginBottom: "1rem",
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                        }}
+                        className="font-mono"
+                        style={{ fontSize: "0.62rem", color: "var(--muted)", marginBottom: "0.875rem", letterSpacing: "0.14em", textTransform: "uppercase" }}
                     >
-                        Color Theme
+                        Accent Color
                     </div>
-                    {themes.map((theme, i) => (
+                    {accents.map((a, i) => (
                         <button
-                            key={theme.name}
-                            onClick={() => applyTheme(theme, i)}
+                            key={a.name}
+                            onClick={() => applyAccent(a, i)}
                             style={{
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "0.75rem",
                                 width: "100%",
-                                background: i === active ? "rgba(99,120,255,0.1)" : "transparent",
-                                border: i === active ? "1px solid rgba(99,120,255,0.3)" : "1px solid transparent",
-                                borderRadius: 8,
-                                padding: "0.5rem 0.75rem",
+                                background: i === active ? `${a.cyan}18` : "transparent",
+                                border: i === active ? `1px solid ${a.cyan}40` : "1px solid transparent",
+                                borderRadius: "var(--radius-sm)",
+                                padding: "0.5rem 0.65rem",
                                 cursor: "pointer",
-                                marginBottom: "0.5rem",
-                                transition: "all 0.2s",
+                                marginBottom: "0.35rem",
+                                transition: "all 0.15s",
                             }}
                         >
-                            <div style={{ display: "flex", gap: "4px" }}>
-                                {[theme.primary, theme.secondary, theme.accent].map((color) => (
-                                    <div
-                                        key={color}
-                                        style={{
-                                            width: 14,
-                                            height: 14,
-                                            borderRadius: "50%",
-                                            background: color,
-                                        }}
-                                    />
-                                ))}
+                            <div style={{ display: "flex", gap: "3px" }}>
+                                <div style={{ width: 12, height: 12, borderRadius: "50%", background: a.cyan }} />
+                                <div style={{ width: 12, height: 12, borderRadius: "50%", background: a.amber }} />
                             </div>
-                            <span style={{ fontSize: "0.8rem", color: "var(--color-text)", fontWeight: 500 }}>
-                                {theme.name}
+                            <span style={{ fontSize: "0.78rem", color: "var(--text)", fontWeight: 500 }}>
+                                {a.name}
                             </span>
                         </button>
                     ))}
                 </div>
             )}
 
-            {/* Toggle Button */}
+            {/* Toggle */}
             <button
                 onClick={() => setOpen(!open)}
                 style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg, var(--color-primary), var(--color-secondary))",
+                    width: 42, height: 42,
+                    borderRadius: "var(--radius-sm)",
+                    background: "var(--cyan)",
                     border: "none",
                     cursor: "pointer",
-                    color: "white",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 0 20px var(--color-primary-glow)",
-                    transition: "transform 0.3s, box-shadow 0.3s",
+                    color: "var(--bg)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all 0.2s",
+                    boxShadow: "0 4px 16px rgba(0,207,255,0.25)",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                title="Change color theme"
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.08)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(0,207,255,0.4)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,207,255,0.25)"; }}
+                title="Change accent color"
             >
-                {open ? <X size={20} /> : <Palette size={20} />}
+                {open ? <X size={17} /> : <Palette size={17} />}
             </button>
         </div>
     );

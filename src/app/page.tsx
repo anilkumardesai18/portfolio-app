@@ -1,6 +1,5 @@
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import SkillsSection from "@/components/sections/SkillsSection";
@@ -23,7 +22,6 @@ export default function Home() {
         <ContactSection />
       </main>
       <Footer />
-      <ThemeSwitcher />
     </>
   );
 }
