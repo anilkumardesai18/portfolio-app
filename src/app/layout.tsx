@@ -74,6 +74,13 @@ export default function RootLayout({
                 "https://www.linkedin.com/in/anil-kumar-desai-b3818b32b",
               ],
               knowsAbout: [
+                "Machine Learning",
+                "NLP & Named Entity Recognition",
+                "spaCy & Sentence-Transformers",
+                "Groq Llama-3.3-70B & Google AI API",
+                "FastAPI & Flask REST APIs",
+                "Streamlit & Data Visualization",
+                "scikit-learn & Classification Models",
                 "AI Development",
                 "Android Development",
                 "Kotlin",

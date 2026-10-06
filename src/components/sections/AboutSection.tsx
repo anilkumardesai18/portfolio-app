@@ -5,17 +5,17 @@ import { motion, useInView } from "framer-motion";
 import { GraduationCap, MapPin, Briefcase, Shield } from "lucide-react";
 
 const stats = [
-    { value: "5+", label: "Projects Built" },
-    { value: "15+", label: "Technologies" },
+    { value: "7+", label: "Projects Built" },
+    { value: "20+", label: "Technologies" },
     { value: "5+", label: "Certifications" },
     { value: "7.8", label: "CGPA" },
 ];
 
 const quickInfo = [
-    { Icon: GraduationCap, label: "B.E Computer Science", sub: "Don Bosco Institute, Bengaluru · 2026" },
-    { Icon: MapPin, label: "Bengaluru, Karnataka", sub: "Nagadevanahalli · 560056 · Open to Remote" },
-    { Icon: Briefcase, label: "MindMatrix Intern + Freelancing", sub: "Android Dev · Gen AI · Full Stack" },
-    { Icon: Shield, label: "NCC Certified (A, B, C)", sub: "Sainik School Kodagu Alumni" },
+    { Icon: GraduationCap, label: "B.E Computer Science", sub: "Don Bosco Institute of Technology, Bengaluru · 2026 (7.8 CGPA)" },
+    { Icon: MapPin, label: "Bengaluru, Karnataka", sub: "Nagadevanahalli · 560056 · Open to Remote / Onsite" },
+    { Icon: Briefcase, label: "AI & Full Stack Developer", sub: "MindMatrix Intern · Freelance Systems Ops" },
+    { Icon: Shield, label: "NCC Certified (A, B, C)", sub: "Sainik School Kodagu Alumnus (Languages: English, Kannada, Hindi)" },
 ];
 
 export default function AboutSection() {
@@ -56,19 +56,13 @@ export default function AboutSection() {
 
                         <div style={{ paddingLeft: "1.5rem", borderLeft: "4px solid var(--red)" }}>
                             <motion.p {...fade(0.1)} style={{ color: "var(--muted)", fontWeight: 500, lineHeight: 1.85, marginBottom: "1rem" }}>
-                                I&apos;m a final-year Computer Science student at Don Bosco Institute, Bengaluru
-                                (CGPA 7.8), passionate about building real-world solutions at the intersection
-                                of AI, mobile development, web, and IoT.
+                                Computer Science graduate (Don Bosco Institute of Technology, CGPA 7.8/10) with hands-on experience building and deploying Machine Learning and Generative AI systems — from training and benchmarking classification models to building LLM-powered agents with semantic search and retrieval.
                             </motion.p>
                             <motion.p {...fade(0.15)} style={{ color: "var(--muted)", fontWeight: 500, lineHeight: 1.85, marginBottom: "1rem" }}>
-                                As an intern at <strong style={{ color: "var(--text)" }}>MindMatrix</strong>,
-                                I built AI-powered Android applications with Generative AI, Kotlin, and Jetpack
-                                Compose. I also freelance in full-stack web development — from responsive front-ends
-                                to optimized back-ends.
+                                Skilled in Python, scikit-learn, NLP (spaCy, Sentence-Transformers), FastAPI/Flask, and REST API design. As an intern at <strong style={{ color: "var(--text)" }}>MindMatrix</strong>, I built AI-powered Android applications with Generative AI APIs. In freelancing, I design database-driven pipelines and full-stack solutions processing 1,000+ records.
                             </motion.p>
                             <motion.p {...fade(0.2)} style={{ color: "var(--muted)", fontWeight: 500, lineHeight: 1.85, marginBottom: "2.5rem" }}>
-                                As an NCC-certified leader from Sainik School Kodagu, I bring discipline and a
-                                hands-on problem-solving mindset to every project.
+                                As an NCC-certified leader (A, B, and C certificates) from Sainik School Kodagu, I bring discipline, teamwork, and structured problem-solving under pressure to design, train, evaluate, and ship production-ready models.
                             </motion.p>
                         </div>
 
@@ -139,8 +133,8 @@ export default function AboutSection() {
                                 background: "var(--bg)",
                             }}
                         >
-                            <p className="font-display" style={{ fontWeight: 600, color: "var(--text)", fontSize: "1.1rem", lineHeight: 1.6, marginBottom: "1rem" }}>
-                                &ldquo;A disciplined tech enthusiast building AI-powered web &amp; mobile solutions that make a real difference — one project at a time.&rdquo;
+                            <p className="font-display" style={{ fontWeight: 600, color: "var(--text)", fontSize: "1rem", lineHeight: 1.6, marginBottom: "1rem" }}>
+                                &ldquo;Seeking an AI/ML Engineer role to design, train, evaluate, and ship intelligent, production-ready models that solve real business problems.&rdquo;
                             </p>
                             <div className="font-mono" style={{ fontSize: "0.75rem", color: "var(--red)", fontWeight: 700, textTransform: "uppercase" }}>
                                 — Career Objective

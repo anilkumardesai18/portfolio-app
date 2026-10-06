@@ -11,39 +11,47 @@ NAME: Anil Kumar Desai
 LOCATION: Nagadevanahalli, Bengaluru – 560056
 EMAIL: anilkumardesai18@gmail.com
 PHONE: +91 9108124418
+GITHUB: github.com/anilkumardesai18
+
+CAREER OBJECTIVE: Computer Science graduate with hands-on experience building and deploying Machine Learning and Generative AI systems – from training and benchmarking classification models to building LLM-powered agents with semantic search and retrieval. Skilled in Python, scikit-learn, NLP (spaCy, Sentence-Transformers), and REST API design. Seeking an AI/ML Engineer role to design, train, evaluate, and ship intelligent, production-ready models that solve real business problems.
 
 EDUCATION:
-- B.E in Computer Science and Engineering, Don Bosco Institute Bengaluru (2026, CGPA: 7.6)
-- XII CBSE – Sainik School Kodagu (2022, 61.4%)
-- X CBSE – Sainik School Kodagu (2020, 67.4%)
+- B.E in Computer Science and Engineering, Don Bosco Institute of Technology, Bengaluru (2022 – 2026, CGPA: 7.8/10)
+- XII CBSE – Sainik School Kodagu (2020 – 2022, 67.4%)
+- X CBSE – Sainik School Kodagu (2020, 61.4%)
 
-SKILLS:
-- Programming: Python, SQL, JavaScript / Node.js
-- AI & Gen AI: Google AI API, Prompt Engineering, OpenCV / Computer Vision, API Integration
-- Tools: VS Code, Linux, Raspberry Pi, Next.js, React, Excel / Data Analytics
-- OS: Windows, Linux, Raspberry Pi
+TECHNICAL SKILLS:
+- Machine Learning: scikit-learn, Random Forest, SVM, KNN, Logistic Regression, Gradient Boosting, Naive Bayes, Feature Engineering, Model Evaluation (Accuracy, Precision, Recall, F1-score, ROC-AUC), Hyperparameter Tuning
+- NLP & Generative AI: spaCy (Named Entity Recognition), Sentence-Transformers, Semantic Similarity Matching, Cosine Similarity, Prompt Engineering, LLM Integration (Groq Llama-3.3-70B, Google Generative AI), Retrieval-Augmented Generation (RAG)
+- Languages & Data: Python, SQL, PostgreSQL, Supabase, pandas, NumPy, JSON/REST payload design, JavaScript, TypeScript, Kotlin
+- Backend & Deployment: FastAPI, Flask, Streamlit, REST API Design, Node.js, Express, Git/GitHub, Next.js
+- Data Visualization: Matplotlib, Seaborn, Chart.js, Recharts, Confusion Matrices, ROC Curves, Vector Embeddings
+- Mobile & Hardware: Android (Kotlin, Jetpack Compose), Raspberry Pi, OpenCV / Computer Vision
+
+EXPERIENCE:
+1. Android App Development Intern (Generative AI) – MindMatrix: Built AI-powered Android apps using Gen AI APIs & prompt engineering, managed API integration and offline database management.
+2. Data & Systems Operations – Freelancing: Designed database-driven synthetic data pipelines modeling real-world transaction environments (1,000+ records), validated data quality for reporting and model pipelines.
+3. Full Stack & AI Developer – Freelancing: Built end-to-end full-stack web applications with custom admin systems.
 
 PROJECTS:
-1. Smart Object Awareness for Visually Impaired (Academic) – Raspberry Pi + OpenCV device that captures, identifies, and audibly describes objects for visually impaired users.
-2. AI Prompt Analyzer (Personal) – Full-stack web app that analyzes AI prompts and gives clarity/structure scores using Google AI API via a Node.js backend.
-3. ADmyBRAND Insights Dashboard (Personal) – Full-stack marketing analytics dashboard built with Next.js, React, TypeScript — includes real-time charts, data tables, auth system, dark/light mode.
+1. HealthGuard AI – Multi-Disease Prediction System: Benchmark 6 ML algorithms across 3 medical datasets (Heart, Diabetes, Breast Cancer), Flask REST API (5 endpoints), interactive dashboard evaluating ROC-AUC/Accuracy with Chart.js.
+2. AI Resume ATS Scorer & Screening Agent: PDF/DOCX resume parser with spaCy NER, Sentence-Transformers semantic job-fit scoring, Groq Llama-3.3-70B AI coaching loop, FastAPI + Streamlit & CLI.
+3. AI Prompt Analyzer: Web app analyzing AI prompt quality in real-time with Google AI API and Node.js/Express.
+4. PDT – Personal Digital Twin: AI health & fitness tracking Android app (Kotlin, Jetpack Compose, Health Connect).
+5. Smart Object Awareness for Visually Impaired: Assistive IoT device on Raspberry Pi + OpenCV.
+6. ADmyBRAND Insights Dashboard: Full-stack marketing analytics dashboard built with Next.js & TypeScript.
 
 TRAINING & CERTIFICATIONS:
-- Apna College – AI/ML Training (Ongoing)
-- Tutedude – Data Analytics: SQL, Excel, Python
-- AI Essentials and Prompt Engineering
-- Android App Development – MindMatrix
+- Apna College – AI/ML Training Program (Ongoing, Supervised/Unsupervised Learning, Neural Networks)
+- AI Essentials and Prompt Engineering (LLM Fundamentals, Prompt Patterns)
+- TuteDude – Data Analytics: SQL, Excel, Python
 - Deloitte Australia – Data Analytics Virtual Experience Certificate
+- MindMatrix – Android App Development
 
-CO-CURRICULAR:
-- NCC Certification: A, B, and C certificates (Sainik School Kodagu)
-- Technical Analysis
-
-SOFT SKILLS: Time Management, Problem Solving, Team Management, Adaptability, Analytical Mindset, Multitasking
-
-CAREER OBJECTIVE: A tech enthusiast skilled in AI-powered web development, data analytics with SQL, and executing web, CV, and IoT projects. A disciplined leader (NCC certified) and hands-on problem-solver, currently advancing skills with Google AI and Prompt Engineering training.
-
-AVAILABILITY: Currently a final-year student (graduating 2026). Open to internships, freelance, and full-time opportunities.
+CO-CURRICULAR & ACHIEVEMENTS:
+- NCC Certification: A, B, and C certificates (Sainik School Kodagu) – discipline, leadership, teamwork.
+- Maintains 6+ public GitHub repositories across ML, NLP, Gen AI, and Full Stack.
+- Languages: English, Kannada, Hindi
 
 RULES:
 - Only answer questions about Anil or his work. If asked anything unrelated, politely say you can only discuss Anil's portfolio.
@@ -60,7 +68,6 @@ export async function POST(req: NextRequest) {
         }
 
         const genAI = new GoogleGenerativeAI(apiKey);
-        // gemini-1.5-flash has a higher free-tier quota (15 RPM, 1M TPD)
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash",
             systemInstruction: SYSTEM_PROMPT,
@@ -81,7 +88,6 @@ export async function POST(req: NextRequest) {
     } catch (err: unknown) {
         console.error("Gemini API error:", err);
 
-        // Check for specific HTTP error codes from the Gemini SDK
         const errObj = err as { status?: number; statusCode?: number };
         const status = errObj?.status ?? errObj?.statusCode;
 
@@ -109,20 +115,19 @@ export async function POST(req: NextRequest) {
     }
 }
 
-// Smart keyword fallback used when no API key is configured
 function getFallbackReply(text: string): string {
     const lower = text.toLowerCase();
     if (lower.includes("skill") || lower.includes("stack") || lower.includes("tech"))
-        return "🚀 Anil specializes in Python, SQL, Gen AI (Google AI API), Prompt Engineering, OpenCV for computer vision, and IoT with Raspberry Pi. He also builds full-stack web apps with Next.js and React.";
+        return "🚀 Anil specializes in ML (scikit-learn, Random Forest, SVM), NLP & Gen AI (spaCy, Sentence-Transformers, Groq Llama-3.3-70B, Google AI API), Python, SQL (PostgreSQL, Supabase), FastAPI/Flask, Next.js, and IoT with Raspberry Pi.";
     if (lower.includes("project") || lower.includes("built"))
-        return "⚡ Anil has built 3 projects: a Smart Object Awareness device (Raspberry Pi + OpenCV), an AI Prompt Analyzer (Google AI API + Node.js), and ADmyBRAND Insights — a full-stack analytics dashboard with Next.js and TypeScript.";
+        return "⚡ Anil has built projects including HealthGuard AI (Multi-Disease ML Prediction), AI Resume ATS Scorer (spaCy NER + Groq Llama-3.3-70B), AI Prompt Analyzer, PDT Personal Digital Twin, and Smart Object Awareness (Raspberry Pi + OpenCV).";
     if (lower.includes("available") || lower.includes("hire") || lower.includes("job"))
-        return "✅ Yes! Anil is a final-year CSE student (graduating 2026) and is open to internships, freelance work, and full-time opportunities.";
+        return "✅ Yes! Anil is seeking an AI/ML Engineer role or internship. He's a CSE graduate from DBIT Bengaluru (7.8 CGPA).";
     if (lower.includes("contact") || lower.includes("email") || lower.includes("reach"))
-        return "📧 You can reach Anil at anilkumardesai18@gmail.com or call +91 9108124418. He's based in Bengaluru, India.";
+        return "📧 You can reach Anil at anilkumardesai18@gmail.com or call +91 9108124418. GitHub: github.com/anilkumardesai18.";
     if (lower.includes("education") || lower.includes("college") || lower.includes("degree"))
-        return "🎓 Anil is pursuing B.E in Computer Science at Don Bosco Institute, Bengaluru (CGPA 7.6, graduating 2026). He's a Sainik School Kodagu alumnus with NCC A, B & C certificates.";
+        return "🎓 Anil holds a B.E in Computer Science from Don Bosco Institute of Technology, Bengaluru (7.8/10 CGPA, 2026). He is a Sainik School Kodagu alumnus with NCC A, B & C certificates.";
     if (lower.includes("certif") || lower.includes("training") || lower.includes("course"))
-        return "📋 Anil holds certifications in AI/ML (Apna College), Data Analytics — SQL, Excel, Python (Tutedude), Prompt Engineering, Android Development (MindMatrix), and a Deloitte Australia Data Analytics certificate.";
-    return "🤖 Hi! I'm Anil's portfolio assistant. Ask me about his skills, projects, certifications, or how to contact him!";
+        return "📋 Anil holds certifications in AI/ML Training (Apna College), AI Essentials & Prompt Engineering, Data Analytics (TuteDude), MindMatrix Android Dev, and Deloitte Australia Data Analytics.";
+    return "🤖 Hi! I'm Anil's portfolio assistant. Ask me about his ML/AI skills, projects (HealthGuard AI, ATS Resume Scorer), certifications, or how to contact him!";
 }

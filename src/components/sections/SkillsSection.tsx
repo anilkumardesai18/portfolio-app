@@ -13,18 +13,39 @@ type BentoCell = {
 
 const bento: BentoCell[] = [
     {
-        title: "Languages",
-        icon: "⌨️",
+        title: "Machine Learning",
+        icon: "🧠",
         span: 7,
-        featured: "Kotlin  ·  Python",
-        chips: ["JavaScript", "TypeScript", "HTML", "CSS"],
+        featured: "scikit-learn  ·  ML Algorithms",
+        chips: ["Random Forest", "SVM", "KNN", "Gradient Boosting", "Naive Bayes", "Feature Engineering", "Hyperparameter Tuning", "ROC-AUC / Precision-Recall"],
     },
     {
-        title: "AI & Gen AI",
+        title: "NLP & Generative AI",
         icon: "🤖",
         span: 5,
-        featured: "Google AI API",
-        chips: ["Prompt Engineering", "OpenCV", "Computer Vision", "Machine Learning"],
+        featured: "Groq Llama-3.3-70B  ·  spaCy  ·  Google AI",
+        chips: ["spaCy (NER)", "Sentence-Transformers", "Cosine Similarity", "Prompt Engineering", "RAG", "LLM Integration"],
+    },
+    {
+        title: "Languages & Data",
+        icon: "⌨️",
+        span: 6,
+        featured: "Python  ·  SQL  ·  PostgreSQL",
+        chips: ["Supabase", "pandas", "NumPy", "JSON / REST Payloads", "JavaScript", "TypeScript", "Kotlin"],
+    },
+    {
+        title: "Backend & Deployment",
+        icon: "⚙️",
+        span: 6,
+        featured: "FastAPI  ·  Flask  ·  Streamlit  ·  Node.js",
+        chips: ["REST API Design", "Express", "Git / GitHub", "Next.js", "Firebase", "Google Cloud"],
+    },
+    {
+        title: "Data Visualization",
+        icon: "📊",
+        span: 4,
+        featured: "Matplotlib  ·  Seaborn",
+        chips: ["Chart.js", "Recharts", "Confusion Matrices", "ROC Curves", "Vector Embeddings"],
     },
     {
         title: "Mobile Dev",
@@ -41,20 +62,6 @@ const bento: BentoCell[] = [
         chips: ["Tailwind CSS", "Framer Motion", "TypeScript", "Responsive Design"],
     },
     {
-        title: "Backend",
-        icon: "⚙️",
-        span: 4,
-        featured: "Node.js  ·  Express",
-        chips: ["REST APIs", "Firebase", "Supabase", "Google Cloud"],
-    },
-    {
-        title: "Databases",
-        icon: "🗄️",
-        span: 5,
-        featured: "SQL  ·  PostgreSQL",
-        chips: ["Supabase", "Firebase", "Render", "Google Cloud"],
-    },
-    {
         title: "IoT & Hardware",
         icon: "🔌",
         span: 4,
@@ -62,21 +69,20 @@ const bento: BentoCell[] = [
         chips: ["OpenCV", "Computer Vision", "Python", "Linux"],
     },
     {
-        title: "Workflow",
+        title: "Workflow & Tools",
         icon: "🛠️",
-        span: 3,
-        featured: "VS Code",
-        chips: ["Android Studio", "Git", "Linux", "Windows"],
+        span: 8,
+        featured: "VS Code  ·  Android Studio  ·  Linux",
+        chips: ["Git", "Windows", "Excel / Data Analytics", "NCC Leadership"],
     },
 ];
 
 const techMarquee = [
-    "Python", "Kotlin", "SQL", "PostgreSQL", "JavaScript", "TypeScript",
-    "Next.js", "React", "Node.js", "Express", "React Native",
-    "Gen AI", "Google AI API", "Prompt Engineering", "OpenCV",
-    "Raspberry Pi", "IoT", "Firebase", "Supabase", "Google Cloud",
-    "Render", "Tailwind CSS", "Jetpack Compose", "Android Studio",
-    "VS Code", "Linux", "Excel", "Data Analytics", "Git",
+    "Python", "scikit-learn", "spaCy", "Sentence-Transformers", "Groq Llama-3.3-70B",
+    "FastAPI", "Flask", "Streamlit", "SQL", "PostgreSQL", "Supabase", "pandas", "NumPy",
+    "Google AI API", "Prompt Engineering", "Random Forest", "SVM", "Gradient Boosting",
+    "Matplotlib", "Seaborn", "Chart.js", "Kotlin", "Next.js", "React", "Node.js",
+    "OpenCV", "Raspberry Pi", "IoT", "Git", "Linux", "Jetpack Compose", "NCC Certified",
 ];
 
 export default function SkillsSection() {

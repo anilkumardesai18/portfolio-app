@@ -6,16 +6,25 @@ import { Calendar } from "lucide-react";
 
 const experiences = [
     {
-        role: "Android App Development Intern",
+        role: "Android App Development Intern (Generative AI)",
         company: "MindMatrix",
         period: "2023 – 2024",
         type: "Internship",
         description:
-            "Built AI-powered Android applications using Kotlin and Jetpack Compose. Integrated Generative AI APIs, engineered prompts for in-app AI features, and managed offline databases for seamless offline UX.",
-        highlights: ["Kotlin", "Jetpack Compose", "Generative AI", "API Integration", "Offline DB"],
+            "Built AI-powered Android applications leveraging Generative AI APIs, applying prompt engineering for context-aware, intelligent in-app responses. Handled end-to-end API integration between mobile front-end and Generative AI backend, and implemented offline database management for uninterrupted functionality.",
+        highlights: ["Kotlin", "Generative AI APIs", "Prompt Engineering", "API Integration", "Offline DB"],
     },
     {
-        role: "Full Stack Developer",
+        role: "Data & Systems Operations",
+        company: "Freelancing",
+        period: "2023 – Present",
+        type: "Freelance",
+        description:
+            "Designed database-driven pipelines using synthetic data to model real-world transaction environments, processing 1,000+ records. Validated data quality and resolved discrepancies to support downstream automation, reporting, and model-input pipelines.",
+        highlights: ["SQL", "Data Pipelines", "Synthetic Data", "Data Quality", "Automation"],
+    },
+    {
+        role: "Full Stack & AI Developer",
         company: "Freelancing",
         period: "2023 – Present",
         type: "Work",
@@ -27,25 +36,25 @@ const experiences = [
 
 const certifications = [
     {
-        role: "AI/ML Training",
+        role: "AI/ML Training Program",
         company: "Apna College",
         period: "Ongoing",
         type: "Training",
-        chips: ["Python", "Machine Learning", "Neural Networks", "AI"],
+        chips: ["Supervised Learning", "Unsupervised Learning", "Neural Network Fundamentals", "AI/ML"],
     },
     {
-        role: "Data Analytics Certificate",
-        company: "Tutedude",
+        role: "AI Essentials and Prompt Engineering",
+        company: "Google / Industry Training",
+        period: "2024",
+        type: "Certification",
+        chips: ["LLM Fundamentals", "Prompt Design Patterns", "Google AI API", "Gen AI"],
+    },
+    {
+        role: "Data Analytics: SQL, Excel, Python",
+        company: "TuteDude",
         period: "2024",
         type: "Certification",
         chips: ["SQL", "Excel", "Python", "Data Analytics"],
-    },
-    {
-        role: "AI Essentials & Prompt Engineering",
-        company: "Google (via Training)",
-        period: "2024",
-        type: "Certification",
-        chips: ["Gen AI", "Prompt Engineering", "Google AI API"],
     },
     {
         role: "Data Analytics Virtual Experience",
@@ -62,11 +71,11 @@ const certifications = [
         chips: ["Android", "Kotlin", "Mobile Dev", "UI/UX"],
     },
     {
-        role: "NCC Certification (A, B, C)",
+        role: "NCC Certification (A, B, & C Certificates)",
         company: "Sainik School Kodagu",
         period: "2018 – 2022",
         type: "Leadership",
-        chips: ["Leadership", "Discipline", "Teamwork", "NCC"],
+        chips: ["Discipline", "Leadership", "Teamwork", "Problem Solving Under Pressure"],
     },
 ];
 
